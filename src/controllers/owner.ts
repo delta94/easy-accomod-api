@@ -42,3 +42,102 @@ export const createOwner: MiddlewareFn = async (req, res, next) => {
     })
   }
 }
+
+export const getPendingOwners: MiddlewareFn = async (req, res, next) => {
+  try {
+    const owners = await User.find({role: 'owner'}).populate({
+      path: 'owner',
+      select: '-_id',
+      match: {status: 'PENDING'},
+    })
+    if (owners) {
+      return res.status(200).json({
+        success: true,
+        data: owners,
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get owners failed',
+    })
+  }
+}
+
+export const getApprovedOwners: MiddlewareFn = async (req, res, next) => {
+  try {
+    const owners = await User.find({role: 'owner'}).populate({
+      path: 'owner',
+      select: '-_id',
+      match: {status: 'APPROVE'},
+    })
+    if (owners) {
+      return res.status(200).json({
+        success: true,
+        data: owners,
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get owners failed',
+    })
+  }
+}
+
+export const approveOwner: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {owner_id} = req.params
+    const user = await User.findOne({_id: owner_id}).populate('owner')
+    const owner = user?.get('owner')
+    owner.update({status: 'APPROVED'})
+    if (owner) {
+      return res.status(200).json({
+        success: true,
+        data: {...owner._doc, status: 'APPROVED'},
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'update failed',
+    })
+  }
+}
+
+export const rejectOwner: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {owner_id} = req.params
+    const user = await User.findOne({_id: owner_id}).populate('owner')
+    const owner = user?.get('owner')
+    await owner.update({status: 'REJECTED'})
+    if (owner) {
+      return res.status(200).json({
+        success: true,
+        data: {...owner._doc, status: 'REJECTED'},
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'update failed',
+    })
+  }
+}
+
+export const updateOwnerInfo: MiddlewareFn = async (req, res, next) => {
+  const {owner_id} = req.params
+  const user = await User.findOne({_id: owner_id}).populate('owner')
+  const owner = user?.get('owner')
+  await owner.update({...req.body})
+  if (owner) {
+    return res.status(200).json({
+      success: true,
+      data: {...owner._doc, ...req.body},
+    })
+  }
+}

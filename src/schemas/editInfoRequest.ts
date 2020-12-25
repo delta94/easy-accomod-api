@@ -35,7 +35,7 @@ const EditInfoRequestSchema: Schema = new Schema({
   status: {
     type: String,
     required: [true, 'status is required'],
-    enum: ['APPROVE', 'REJECT', 'PENDING'],
+    enum: ['APPROVED', 'REJECTED', 'PENDING'],
     default: 'PENDING',
   },
   isActive: {

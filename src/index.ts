@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import hpp from 'hpp'
 import mongoose from 'mongoose'
 
-import {checkAuth} from './middlewares/authentication'
+import {checkAuth, checkAdmin} from './middlewares/authentication'
 
 import * as ownerController from './controllers/owner'
 import * as userController from './controllers/user'
@@ -37,7 +37,12 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
 app.use(hpp())
 
-app.post('/api/owner/create', checkAuth, ownerController.createOwner)
+app.post('/api/owners/create', checkAuth, ownerController.createOwner)
+app.get('/api/owners/pending', checkAuth, ownerController.getPendingOwners) // admin
+app.get('/api/owners/approved', checkAuth, ownerController.getApprovedOwners) // admin
+app.put('/api/owners/:owner_id/approve', checkAuth, ownerController.approveOwner) // admin
+app.put('/api/owners/:owner_id/reject', checkAuth, ownerController.rejectOwner) // admin
+// app.put('/api/owners/:owner_id/update', checkAuth, ownerController.updateOwnerInfo) // admin
 
 app.get('/api/profile', checkAuth, userController.getProfile)
 

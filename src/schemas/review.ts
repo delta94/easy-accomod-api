@@ -30,7 +30,7 @@ const ReviewSchema: Schema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['APPROVE', 'REJECT', 'PENDING'],
+    enum: ['APPROVED', 'REJECTED', 'PENDING'],
     default: 'PENDING',
   },
 })

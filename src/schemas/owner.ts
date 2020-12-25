@@ -41,7 +41,7 @@ const OwnerSchema: Schema = new Schema({
   status: {
     type: String,
     required: [true, 'Status is required'],
-    enum: ['APPROVE', 'REJECT', 'PENDING'],
+    enum: ['APPROVED', 'REJECTED', 'PENDING'],
     default: 'PENDING',
   },
   isActive: {
