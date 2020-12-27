@@ -9,7 +9,7 @@ export const createRenter: MiddlewareFn = async (req, res, next) => {
     const newRenter = new Renter({email, name})
     await newRenter.save()
 
-    const newUser = new User({role: ['renter'], _id, renter: newRenter._id})
+    const newUser = new User({roles: ['renter'], _id, renter: newRenter._id})
     await newUser.save()
 
     return res.status(200).json({

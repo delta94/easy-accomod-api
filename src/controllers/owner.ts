@@ -16,7 +16,7 @@ export const createOwner: MiddlewareFn = async (req, res, next) => {
     const newOwner = new Owner({email, identity, name, address, phone})
     await newOwner.save()
 
-    const newUser = new User({role: ['owner'], _id, owner: newOwner._id})
+    const newUser = new User({roles: ['owner'], _id, owner: newOwner._id})
     await newUser.save()
 
     return res.status(200).json({
@@ -92,6 +92,7 @@ export const approveOwner: MiddlewareFn = async (req, res, next) => {
   try {
     const {owner_id} = req.params
     const user = await User.findOne({_id: owner_id}).populate('owner')
+    await user?.update({status: 'APPROVED'})
     const owner = user?.get('owner')
     owner.update({status: 'APPROVED'})
     if (owner) {
@@ -113,6 +114,7 @@ export const rejectOwner: MiddlewareFn = async (req, res, next) => {
   try {
     const {owner_id} = req.params
     const user = await User.findOne({_id: owner_id}).populate('owner')
+    await user?.update({status: 'REJECTED'})
     const owner = user?.get('owner')
     await owner.update({status: 'REJECTED'})
     if (owner) {

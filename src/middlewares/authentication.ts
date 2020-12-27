@@ -13,6 +13,7 @@ export const checkAuth: MiddlewareFn = async (req, res, next) => {
       .then(async (decodedToken) => {
         try {
           const schema = await User.findOne({_id: decodedToken.uid})
+          console.log(req_role)
           if (schema?.roles.includes(req_role)) {
             const user = await User.findOne({_id: decodedToken.uid}).populate(req_role)
             req.user = {role: req_role, uid: decodedToken.uid, ...user?.get(req_role)._doc}
