@@ -8,7 +8,7 @@ export const createAdmin: MiddlewareFn = async (req, res, next) => {
     const newAdmin = new Admin({email, name})
     await newAdmin.save()
 
-    const newUser = new Admin({role: 'owner', _id, owner: newAdmin._id})
+    const newUser = new Admin({roles: ['admin'], _id, owner: newAdmin._id})
     await newUser.save()
 
     return res.status(200).json({

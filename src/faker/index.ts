@@ -120,7 +120,7 @@ for (let i = 3; i < 6; i += 1) {
       })
       await newOwner.save()
 
-      const newUser = new User({role: 'owner', _id: userRecord.uid, owner: newOwner._id})
+      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id})
       await newUser.save()
       console.log(newOwner)
     })
