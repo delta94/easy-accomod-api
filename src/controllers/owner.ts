@@ -92,13 +92,13 @@ export const approveOwner: MiddlewareFn = async (req, res, next) => {
   try {
     const {owner_id} = req.params
     const user = await User.findOne({_id: owner_id}).populate('owner')
+    const owner = await Owner.findOne({_id: user?.get('owner')._id})
     await user?.update({status: 'APPROVED'})
-    const owner = user?.get('owner')
-    owner.update({status: 'APPROVED'})
+    await owner?.update({status: 'APPROVED'})
     if (owner) {
       return res.status(200).json({
         success: true,
-        data: {...owner._doc, status: 'APPROVED'},
+        data: {...owner, status: 'APPROVED'},
       })
     }
   } catch (error) {
@@ -114,13 +114,13 @@ export const rejectOwner: MiddlewareFn = async (req, res, next) => {
   try {
     const {owner_id} = req.params
     const user = await User.findOne({_id: owner_id}).populate('owner')
+    const owner = await Owner.findOne({_id: user?.get('owner')._id})
     await user?.update({status: 'REJECTED'})
-    const owner = user?.get('owner')
-    await owner.update({status: 'REJECTED'})
+    await owner?.update({status: 'REJECTED'})
     if (owner) {
       return res.status(200).json({
         success: true,
-        data: {...owner._doc, status: 'REJECTED'},
+        data: {...owner, status: 'REJECTED'},
       })
     }
   } catch (error) {

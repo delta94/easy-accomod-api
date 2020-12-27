@@ -22,7 +22,9 @@ export const createRoom: MiddlewareFn = async (req, res, next) => {
 export const getRoomDetail: MiddlewareFn = async (req, res, next) => {
   try {
     const {room_id} = req.params
-    const room = await Room.findOne({_id: room_id}).populate('owner')
+    const room = await Room.findOne({_id: room_id})
+      .populate('owner')
+      .populate('rooms')
     // bookmark
     return res.status(200).json({
       success: true,
