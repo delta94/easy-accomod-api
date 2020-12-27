@@ -5,8 +5,10 @@ export interface RoomDocument extends Document {
   reviews: [Schema.Types.ObjectId]
   roomType: string
   roomQuantity: number
+  name: string
   area: number
   city: string
+  description?: string
   detailAddress: string
   locationAround?: [string]
   bathroomType: string
@@ -52,6 +54,10 @@ const RoomSchema: Schema = new Schema({
     required: false,
     default: 1,
   },
+  name: {
+    type: String,
+    required: [true, 'name is required'],
+  },
   area: {
     type: Number,
     required: [true, 'area is required'],
@@ -59,6 +65,10 @@ const RoomSchema: Schema = new Schema({
   city: {
     type: String,
     required: [true, 'city is required'],
+  },
+  description: {
+    type: String,
+    required: false,
   },
   detailAddress: {
     type: String,

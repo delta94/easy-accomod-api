@@ -68,6 +68,8 @@ for (let i = 0; i < 3; i += 1) {
         const newRoom = new Room({
           owner: newOwner._id,
           roomType: roomTypes[j % 4],
+          name: faker.name.findName(),
+          description: faker.commerce.productDescription(),
           area: 30,
           city: cities[j],
           detailAddress: faker.address.streetAddress(),
@@ -92,6 +94,8 @@ for (let i = 0; i < 3; i += 1) {
             'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(1).jpeg?alt=media&token=4a5db726-dcb6-46b3-98ac-9ecffe84e601',
             'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(2).jpeg?alt=media&token=1e12f1e3-4081-4adc-be3f-10793f368eef',
             'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download.jpeg?alt=media&token=b4b5f627-fb4c-4494-9839-59a4a6a2c121',
+            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(3).jpeg?alt=media&token=e092270f-abbd-41af-ae4a-95089372ac74',
+            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images.jpeg?alt=media&token=cef3d9ed-a60b-4fc2-b563-e86128811f2d',
           ],
         })
         newRoom.save()

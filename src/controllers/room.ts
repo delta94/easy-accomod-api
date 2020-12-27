@@ -1,4 +1,5 @@
 import Room from '../models/room'
+import Bookmark from '../models/bookmark'
 import {MiddlewareFn} from '../types/express'
 
 export const createRoom: MiddlewareFn = async (req, res, next) => {
@@ -22,10 +23,22 @@ export const createRoom: MiddlewareFn = async (req, res, next) => {
 export const getRoomDetail: MiddlewareFn = async (req, res, next) => {
   try {
     const {room_id} = req.params
-    const room = await Room.findOne({_id: room_id})
-      .populate('owner')
-      .populate('rooms')
-    // bookmark
+    const room = await Room.findOne({_id: room_id}).populate('owner')
+    const {_id} = req.user
+    if (_id !== '') {
+      const bookmark = Bookmark.find({renter: _id, room: room_id})
+      if (bookmark) {
+        return res.status(200).json({
+          success: true,
+          data: {...room, is_bookmarked: true},
+        })
+      }
+      return res.status(200).json({
+        success: true,
+        data: {...room, is_bookmarked: false},
+      })
+    }
+
     return res.status(200).json({
       success: true,
       data: room,
