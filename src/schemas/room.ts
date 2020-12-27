@@ -36,10 +36,12 @@ const RoomSchema: Schema = new Schema({
     required: true,
     ref: 'Owner',
   },
-  reviews: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Reviews',
-  },
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Review',
+    },
+  ],
   roomType: {
     type: String,
     required: [true, 'room type is required'],
