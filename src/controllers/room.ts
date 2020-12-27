@@ -26,22 +26,22 @@ export const getRoomDetail: MiddlewareFn = async (req, res, next) => {
     const room = await Room.findOne({_id: room_id}).populate('owner')
     const {_id} = req.user
     if (_id !== '') {
-      const bookmark = Bookmark.find({renter: _id, room: room_id})
+      const bookmark = await Bookmark.findOne({renter: _id, room: room_id})
       if (bookmark) {
         return res.status(200).json({
           success: true,
-          data: {...room, is_bookmarked: true},
+          data: {room, is_bookmarked: true},
         })
       }
       return res.status(200).json({
         success: true,
-        data: {...room, is_bookmarked: false},
+        data: {room, is_bookmarked: false},
       })
     }
 
     return res.status(200).json({
       success: true,
-      data: room,
+      data: {room},
     })
   } catch (error) {
     console.log(error)
