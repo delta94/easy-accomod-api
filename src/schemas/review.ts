@@ -26,6 +26,7 @@ const ReviewSchema: Schema = new Schema({
   rating: {
     type: Number,
     required: false,
+    default: 5,
   },
   status: {
     type: String,

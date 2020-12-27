@@ -12,7 +12,9 @@ import {checkAuth, checkAdmin, getUID} from './middlewares/authentication'
 import * as ownerController from './controllers/owner'
 import * as userController from './controllers/user'
 import * as renterController from './controllers/renter'
+import * as adminController from './controllers/admin'
 import * as roomController from './controllers/room'
+import * as reviewController from './controllers/review'
 
 dotenv.config()
 
@@ -60,12 +62,26 @@ app.put('/api/owners/:owner_id/reject', checkAuth, ownerController.rejectOwner) 
 // app.put('/api/owners/:owner_id/update', checkAuth, ownerController.updateOwnerInfo) // admin
 
 /**
+ * admin api
+ */
+app.post('/api/admins/create', getUID, adminController.createAdmin)
+
+/**
  * room api
  */
 app.post('/api/rooms/create', checkAuth, roomController.createRoom) // owner, admin
 app.put('/api/rooms/:room_id/update', checkAuth, roomController.updateRoom) // owner, admin
 app.get('/api/rooms/:room_id', roomController.getRoomDetail)
 app.get('/api/rooms/city/:city', roomController.getRoomsByCity)
+app.put('/api/rooms/:room_id/approve', roomController.approveRoom) // admin
+app.put('/api/rooms/:room_id/reject', roomController.rejectRoom) // admin
+
+/**
+ * review api
+ */
+app.post('/api/reviews/create', reviewController.createReview) // renter
+app.put('/api/reviews/:review_id/approve', reviewController.approveReview) // admin
+app.put('/api/reviews/:review_id/reject', reviewController.rejectReview) // admin
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)

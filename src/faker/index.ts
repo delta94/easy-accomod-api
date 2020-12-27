@@ -32,10 +32,10 @@ admin
     password: '123456',
   })
   .then(async (userRecord) => {
-    const newAdmin = new Renter({email: 'admin@gmail.com', name: 'Admin'})
+    const newAdmin = new Admin({email: 'admin@gmail.com', name: 'Admin'})
     await newAdmin.save()
 
-    const newUser = new User({role: 'admin', _id: userRecord.uid, admin: newAdmin._id})
+    const newUser = new User({roles: ['admin'], _id: userRecord.uid, admin: newAdmin._id})
     await newUser.save()
     console.log('Created admin')
   })
@@ -61,7 +61,7 @@ for (let i = 0; i < 3; i += 1) {
       })
       await newOwner.save()
 
-      const newUser = new User({role: 'owner', _id: userRecord.uid, owner: newOwner._id})
+      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id})
       await newUser.save()
 
       for (let j = 0; j < 8; j += 1) {
