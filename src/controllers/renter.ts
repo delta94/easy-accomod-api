@@ -1,11 +1,11 @@
-import Renter from '../models/owner'
+import Renter from '../models/renter'
 import User from '../models/user'
 import {MiddlewareFn} from '../types/express.d'
 
 export const createRenter: MiddlewareFn = async (req, res, next) => {
   try {
     const {email, name}: {email: string; name: string} = req.body
-    const {_id} = req.user
+    const _id = req.user.uid
     const newRenter = new Renter({email, name})
     await newRenter.save()
 
@@ -20,6 +20,7 @@ export const createRenter: MiddlewareFn = async (req, res, next) => {
       },
     })
   } catch (error) {
+    console.log(error)
     if (error?.code === 11000) {
       return res.status(400).json({
         success: false,

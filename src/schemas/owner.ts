@@ -7,6 +7,7 @@ export interface OwnerDocument extends Document {
   address: string
   phone: string
   status: string
+  rooms: [Schema.Types.ObjectId]
   isActive: boolean
 }
 
@@ -44,6 +45,12 @@ const OwnerSchema: Schema = new Schema({
     enum: ['APPROVED', 'REJECTED', 'PENDING'],
     default: 'PENDING',
   },
+  rooms: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Room',
+    },
+  ],
   isActive: {
     type: String,
     required: [true, 'isActive is required'],

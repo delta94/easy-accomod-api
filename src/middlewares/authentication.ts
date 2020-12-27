@@ -11,13 +11,38 @@ export const checkAuth: MiddlewareFn = async (req, res, next) => {
       .then(async (decodedToken) => {
         try {
           const schema = await User.findOne({_id: decodedToken.uid})
-          const user = await User.findOne({_id: decodedToken.uid}).populate(schema?.role, '-_id')
+          console.log(schema)
 
+          const user = await User.findOne({_id: decodedToken.uid}).populate(schema?.role)
           req.user = {role: user?.role, uid: decodedToken.uid, ...user?.get(user.role)._doc}
           next()
         } catch (error) {
           console.log(error)
         }
+      })
+      .catch(() => {
+        res.status(403).json({
+          success: false,
+          error: 'Unauthorized',
+        })
+      })
+  } else {
+    res.status(403).json({
+      success: false,
+      error: 'Unauthorized',
+    })
+  }
+}
+
+export const getUID: MiddlewareFn = async (req, res, next) => {
+  let token = req.headers.authorization
+  if (token) {
+    admin
+      .auth()
+      .verifyIdToken(token)
+      .then(async (decodedToken) => {
+        req.user = {uid: decodedToken.uid}
+        next()
       })
       .catch(() => {
         res.status(403).json({

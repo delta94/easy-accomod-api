@@ -6,9 +6,8 @@ export interface RoomDocument extends Document {
   roomQuantity: number
   area: number
   city: string
-  district: string
   detailAddress: string
-  locationAround: [string]
+  locationAround?: [string]
   bathroomType: string
   kitchenType: string
   hasWaterHeater: boolean
@@ -22,8 +21,8 @@ export interface RoomDocument extends Document {
   electricityPrice: number
   images: [string]
   isWithOwner: boolean
-  displayTime: number
-  displayTimeUnit: Schema.Types.ObjectId
+  isExpired: boolean
+  expiredDate: Date
   views: number
   isRent: boolean
   status: string
@@ -53,10 +52,6 @@ const RoomSchema: Schema = new Schema({
   city: {
     type: String,
     required: [true, 'city is required'],
-  },
-  district: {
-    type: String,
-    required: [true, 'district is required'],
   },
   detailAddress: {
     type: String,
@@ -129,7 +124,7 @@ const RoomSchema: Schema = new Schema({
     required: [true, 'images is required'],
     validate: {
       validator(v: [string]) {
-        return v.length > 3
+        return v.length >= 3
       },
       message: () => `minimum is 3 images`,
     },
@@ -138,14 +133,16 @@ const RoomSchema: Schema = new Schema({
     type: Boolean,
     required: [true, 'isWithOwner is required'],
   },
-  displayTime: {
-    type: Number,
-    required: [true, 'displayTime is required'],
+  isExpired: {
+    type: Boolean,
+    required: [true, 'isExpired is required'],
+    enum: [true, false],
+    default: true,
   },
-  displayTimeUnit: {
-    type: Schema.Types.ObjectId,
-    required: [true, 'displayTimeUnit is required'],
-    ref: 'DisplayTimeUnit',
+  expiredDate: {
+    type: Date,
+    required: [true, 'expiredDate is required'],
+    default: Date.now(),
   },
   views: {
     type: Number,

@@ -1,5 +1,6 @@
 import Owner from '../models/owner'
 import User from '../models/user'
+import Room from '../models/room'
 import {MiddlewareFn} from '../types/express.d'
 
 export const createOwner: MiddlewareFn = async (req, res, next) => {
@@ -11,7 +12,7 @@ export const createOwner: MiddlewareFn = async (req, res, next) => {
       address,
       phone,
     }: {email: string; identity: string; name: string; address: string; phone: string} = req.body
-    const {_id} = req.user
+    const _id = req.user.uid
     const newOwner = new Owner({email, identity, name, address, phone})
     await newOwner.save()
 
@@ -130,14 +131,39 @@ export const rejectOwner: MiddlewareFn = async (req, res, next) => {
 }
 
 export const updateOwnerInfo: MiddlewareFn = async (req, res, next) => {
-  const {owner_id} = req.params
-  const user = await User.findOne({_id: owner_id}).populate('owner')
-  const owner = user?.get('owner')
-  await owner.update({...req.body})
-  if (owner) {
+  try {
+    const {owner_id} = req.params
+    const user = await User.findOne({_id: owner_id}).populate('owner')
+    const owner = user?.get('owner')
+    await owner.update({...req.body})
+    if (owner) {
+      return res.status(200).json({
+        success: true,
+        data: {...owner._doc, ...req.body},
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'update failed',
+    })
+  }
+}
+
+export const getOwnerRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const owner = Owner.findOne({_id}).populate('rooms')
     return res.status(200).json({
       success: true,
-      data: {...owner._doc, ...req.body},
+      data: owner,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get owner rooms failed',
     })
   }
 }

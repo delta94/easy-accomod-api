@@ -7,10 +7,12 @@ import bodyParser from 'body-parser'
 import hpp from 'hpp'
 import mongoose from 'mongoose'
 
-import {checkAuth, checkAdmin} from './middlewares/authentication'
+import {checkAuth, checkAdmin, getUID} from './middlewares/authentication'
 
 import * as ownerController from './controllers/owner'
 import * as userController from './controllers/user'
+import * as renterController from './controllers/renter'
+import * as roomController from './controllers/room'
 
 dotenv.config()
 
@@ -37,14 +39,33 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
 app.use(hpp())
 
-app.post('/api/owners/create', checkAuth, ownerController.createOwner)
+/**
+ * user api
+ */
+app.get('/api/profile', checkAuth, userController.getProfile)
+
+/**
+ * renter api
+ */
+app.post('/api/renters/create', getUID, renterController.createRenter)
+
+/**
+ * owner api
+ */
+app.post('/api/owners/create', getUID, ownerController.createOwner)
 app.get('/api/owners/pending', checkAuth, ownerController.getPendingOwners) // admin
 app.get('/api/owners/approved', checkAuth, ownerController.getApprovedOwners) // admin
 app.put('/api/owners/:owner_id/approve', checkAuth, ownerController.approveOwner) // admin
 app.put('/api/owners/:owner_id/reject', checkAuth, ownerController.rejectOwner) // admin
 // app.put('/api/owners/:owner_id/update', checkAuth, ownerController.updateOwnerInfo) // admin
 
-app.get('/api/profile', checkAuth, userController.getProfile)
+/**
+ * room api
+ */
+app.post('/api/rooms/create', checkAuth, roomController.createRoom) // owner, admin
+app.put('/api/rooms/:room_id/update', checkAuth, roomController.updateRoom) // owner, admin
+app.get('/api/rooms/:room_id', roomController.getRoomDetail)
+app.get('/api/rooms/city/:city', roomController.getRoomsByCity)
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
