@@ -23,8 +23,8 @@ export const createBookmark: MiddlewareFn = async (req, res, next) => {
 export const removeBookmark: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const {bookmarkId} = req.body
-    const bookmark = await Bookmark.findOne({_id: bookmarkId})
+    const {roomId} = req.body
+    const bookmark = await Bookmark.findOne({renter: _id, room: roomId})
     if (bookmark?.renter === _id) {
       bookmark?.remove()
       return res.status(200).json({

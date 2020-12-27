@@ -88,9 +88,9 @@ app.put('/api/reviews/:review_id/reject', reviewController.rejectReview) // admi
 /**
  * bookmark api
  */
-app.post('/api/bookmarks/create', bookmarkController.createBookmark) // renter
-app.delete('/api/bookmarks/delete', bookmarkController.removeBookmark) // renter
-app.delete('/api/bookmarks', bookmarkController.getAllBookmarks) // renter
+app.post('/api/bookmarks/create', checkAuth, bookmarkController.createBookmark) // renter
+app.delete('/api/bookmarks/delete', checkAuth, bookmarkController.removeBookmark) // renter
+app.get('/api/bookmarks', bookmarkController.getAllBookmarks) // renter
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
