@@ -46,7 +46,7 @@ export const createOwner: MiddlewareFn = async (req, res, next) => {
 
 export const getPendingOwners: MiddlewareFn = async (req, res, next) => {
   try {
-    const owners = await User.find({roles: {$in: ['owner']}}).populate({
+    const owners = await User.find({status: 'PENDING', roles: {$in: ['owner']}}).populate({
       path: 'owner',
       select: '-_id',
       match: {status: 'PENDING'},
@@ -68,10 +68,10 @@ export const getPendingOwners: MiddlewareFn = async (req, res, next) => {
 
 export const getApprovedOwners: MiddlewareFn = async (req, res, next) => {
   try {
-    const owners = await User.find({roles: {$in: ['owner']}}).populate({
+    const owners = await User.find({status: 'APPROVED', roles: {$in: ['owner']}}).populate({
       path: 'owner',
       select: '-_id',
-      match: {status: 'APPROVE'},
+      match: {status: 'APPROVED'},
     })
     if (owners) {
       return res.status(200).json({

@@ -61,7 +61,7 @@ for (let i = 0; i < 3; i += 1) {
       })
       await newOwner.save()
 
-      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id})
+      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id, status: 'APPROVED'})
       await newUser.save()
 
       for (let j = 0; j < 8; j += 1) {
@@ -120,7 +120,7 @@ for (let i = 3; i < 6; i += 1) {
       })
       await newOwner.save()
 
-      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id})
+      const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id, status: 'PENDING'})
       await newUser.save()
       console.log(newOwner)
     })

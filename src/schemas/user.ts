@@ -7,6 +7,7 @@ export interface UserDocument extends Document {
   admin?: Schema.Types.ObjectId
   renter?: Schema.Types.ObjectId
   owner?: Schema.Types.ObjectId
+  status: string
 }
 
 const UserSchema: Schema = new Schema({
@@ -33,6 +34,12 @@ const UserSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     required: false,
     ref: 'Owner',
+  },
+  status: {
+    type: String,
+    required: [true, 'Status is required'],
+    enum: ['APPROVED', 'REJECTED', 'PENDING'],
+    default: 'PENDING',
   },
 })
 
