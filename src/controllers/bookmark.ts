@@ -5,6 +5,15 @@ export const createBookmark: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
     const {roomId} = req.body
+    const exist = await Bookmark.exists({renter: _id, room: roomId})
+    if (exist) {
+      const bookmark = await Bookmark.findOne({renter: _id, room: roomId})
+      await bookmark?.update({isActive: true})
+      return res.status(200).json({
+        success: true,
+        data: {renter: _id, room: roomId},
+      })
+    }
     const newBookmark = new Bookmark({renter: _id, room: roomId})
     await newBookmark.save()
     return res.status(200).json({
@@ -25,16 +34,10 @@ export const removeBookmark: MiddlewareFn = async (req, res, next) => {
     const {_id} = req.user
     const {roomId} = req.body
     const bookmark = await Bookmark.findOne({renter: _id, room: roomId})
-    if (bookmark?.renter === _id) {
-      bookmark?.remove()
-      return res.status(200).json({
-        success: true,
-        data: 'Delete bookmark successfully',
-      })
-    }
-    return res.status(400).json({
-      success: false,
-      error: 'Not allow to remove bookmark',
+    await bookmark?.update({isActive: false})
+    return res.status(200).json({
+      success: true,
+      data: 'Delete bookmark successfully',
     })
   } catch (error) {
     console.log(error)
@@ -48,7 +51,12 @@ export const removeBookmark: MiddlewareFn = async (req, res, next) => {
 export const getAllBookmarks: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const bookmarks = Bookmark.find({renter: _id}).populate('room')
+    const bookmarks = await Bookmark.find({renter: _id}).populate({
+      path: 'room',
+      populate: {
+        path: 'reviews',
+      },
+    })
     return res.status(200).json({
       success: true,
       data: bookmarks,

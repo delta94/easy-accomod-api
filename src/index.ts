@@ -75,22 +75,22 @@ app.get('/api/rooms/pending', roomController.getPendingRooms) // admin
 app.put('/api/rooms/:room_id/update', checkAuth, roomController.updateRoom) // owner, admin
 app.get('/api/rooms/:room_id', checkAuthOrNot, roomController.getRoomDetail)
 app.get('/api/rooms/city/:city', roomController.getRoomsByCity)
-app.put('/api/rooms/:room_id/approve', roomController.approveRoom) // admin
-app.put('/api/rooms/:room_id/reject', roomController.rejectRoom) // admin
+app.put('/api/rooms/:room_id/approve', checkAuth, roomController.approveRoom) // admin
+app.put('/api/rooms/:room_id/reject', checkAuth, roomController.rejectRoom) // admin
 
 /**
  * review api
  */
-app.post('/api/reviews/create', reviewController.createReview) // renter
-app.put('/api/reviews/:review_id/approve', reviewController.approveReview) // admin
-app.put('/api/reviews/:review_id/reject', reviewController.rejectReview) // admin
+app.post('/api/reviews/create', checkAuth, reviewController.createReview) // renter
+app.put('/api/reviews/:review_id/approve', checkAuth, reviewController.approveReview) // admin
+app.put('/api/reviews/:review_id/reject', checkAuth, reviewController.rejectReview) // admin
 
 /**
  * bookmark api
  */
 app.post('/api/bookmarks/create', checkAuth, bookmarkController.createBookmark) // renter
-app.delete('/api/bookmarks/delete', checkAuth, bookmarkController.removeBookmark) // renter
-app.get('/api/bookmarks', bookmarkController.getAllBookmarks) // renter
+app.put('/api/bookmarks/delete', checkAuth, bookmarkController.removeBookmark) // renter
+app.get('/api/bookmarks', checkAuth, bookmarkController.getAllBookmarks) // renter
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
