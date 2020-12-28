@@ -62,7 +62,10 @@ app.get('/api/owners/approved', checkAuth, ownerController.getApprovedOwners) //
 app.put('/api/owners/:owner_id/approve', checkAuth, ownerController.approveOwner) // admin
 app.put('/api/owners/:owner_id/reject', checkAuth, ownerController.rejectOwner) // admin
 // app.put('/api/owners/:owner_id/update', checkAuth, ownerController.updateOwnerInfo) // admin
-
+app.get('/api/owner/rooms/pending', checkAuth, ownerController.getPendingRooms)
+app.get('/api/owner/rooms/approved', checkAuth, ownerController.getApprovedRooms)
+app.get('/api/owner/rooms/rejected', checkAuth, ownerController.getRejectedRooms)
+app.get('/api/owner/rooms/rent', checkAuth, ownerController.getRentRooms)
 /**
  * admin api
  */

@@ -172,3 +172,71 @@ export const getOwnerRooms: MiddlewareFn = async (req, res, next) => {
     })
   }
 }
+
+export const getPendingRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const rooms = Room.find({owner: _id, status: 'PENDING'})
+    return res.status(200).json({
+      success: true,
+      data: rooms,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get rooms failed',
+    })
+  }
+}
+
+export const getRejectedRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const rooms = Room.find({owner: _id, status: 'REJECTED'})
+    return res.status(200).json({
+      success: true,
+      data: rooms,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get rooms failed',
+    })
+  }
+}
+
+export const getApprovedRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const rooms = Room.find({owner: _id, status: 'APPROVED'})
+    return res.status(200).json({
+      success: true,
+      data: rooms,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get rooms failed',
+    })
+  }
+}
+
+export const getRentRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const rooms = Room.find({owner: _id, isRent: true})
+    return res.status(200).json({
+      success: true,
+      data: rooms,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get rooms failed',
+    })
+  }
+}
