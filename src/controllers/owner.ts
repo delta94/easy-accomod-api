@@ -156,27 +156,10 @@ export const updateOwnerInfo: MiddlewareFn = async (req, res, next) => {
   }
 }
 
-export const getOwnerRooms: MiddlewareFn = async (req, res, next) => {
-  try {
-    const {_id} = req.user
-    const owner = Owner.findOne({_id}).populate('rooms')
-    return res.status(200).json({
-      success: true,
-      data: owner,
-    })
-  } catch (error) {
-    console.log(error)
-    return res.status(400).json({
-      success: false,
-      error: 'get owner rooms failed',
-    })
-  }
-}
-
 export const getPendingRooms: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const rooms = Room.find({owner: _id, status: 'PENDING'})
+    const rooms = await Room.find({owner: _id, status: 'PENDING'})
     return res.status(200).json({
       success: true,
       data: rooms,
@@ -193,7 +176,7 @@ export const getPendingRooms: MiddlewareFn = async (req, res, next) => {
 export const getRejectedRooms: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const rooms = Room.find({owner: _id, status: 'REJECTED'})
+    const rooms = await Room.find({owner: _id, status: 'REJECTED'})
     return res.status(200).json({
       success: true,
       data: rooms,
@@ -210,7 +193,7 @@ export const getRejectedRooms: MiddlewareFn = async (req, res, next) => {
 export const getApprovedRooms: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const rooms = Room.find({owner: _id, status: 'APPROVED'})
+    const rooms = await Room.find({owner: _id, status: 'APPROVED'})
     return res.status(200).json({
       success: true,
       data: rooms,
@@ -227,7 +210,7 @@ export const getApprovedRooms: MiddlewareFn = async (req, res, next) => {
 export const getRentRooms: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const rooms = Room.find({owner: _id, isRent: true})
+    const rooms = await Room.find({owner: _id, isRent: true})
     return res.status(200).json({
       success: true,
       data: rooms,
@@ -237,6 +220,56 @@ export const getRentRooms: MiddlewareFn = async (req, res, next) => {
     return res.status(400).json({
       success: false,
       error: 'get rooms failed',
+    })
+  }
+}
+
+export const handleRentRoom: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const {room_id} = req.params
+    const room = await Room.findOne({_id: room_id, owner: _id})
+    if (room) {
+      await room.update({isRent: true})
+      return res.status(200).json({
+        success: true,
+        data: room,
+      })
+    }
+    return res.status(403).json({
+      success: false,
+      error: 'Not allow to update',
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'update rooms failed',
+    })
+  }
+}
+
+export const handleReturnRoom: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const {room_id} = req.params
+    const room = await Room.findOne({_id: room_id, owner: _id})
+    if (room) {
+      await room.update({isRent: false})
+      return res.status(200).json({
+        success: true,
+        data: room,
+      })
+    }
+    return res.status(403).json({
+      success: false,
+      error: 'Not allow to update',
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'update rooms failed',
     })
   }
 }
