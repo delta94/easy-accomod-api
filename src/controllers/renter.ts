@@ -34,3 +34,23 @@ export const createRenter: MiddlewareFn = async (req, res, next) => {
     })
   }
 }
+
+export const getAllRenter: MiddlewareFn = async (req, res, next) => {
+  try {
+    const renters = await User.find({roles: {$in: ['renter']}}).populate({
+      path: 'renter',
+    })
+    if (renters) {
+      return res.status(200).json({
+        success: true,
+        data: renters,
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get owners failed',
+    })
+  }
+}

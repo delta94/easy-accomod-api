@@ -51,6 +51,7 @@ app.get('/api/profile', checkAuth, userController.getProfile)
  * renter api
  */
 app.post('/api/renters/create', getUID, renterController.createRenter)
+app.get('/api/renters', checkAuth, renterController.getAllRenter)
 
 /**
  * owner api
