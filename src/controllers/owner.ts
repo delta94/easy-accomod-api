@@ -224,6 +224,23 @@ export const getRentRooms: MiddlewareFn = async (req, res, next) => {
   }
 }
 
+export const getReadyRooms: MiddlewareFn = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const rooms = await Room.find({owner: _id, isRent: false, status: 'APPROVED'})
+    return res.status(200).json({
+      success: true,
+      data: rooms,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({
+      success: false,
+      error: 'get rooms failed',
+    })
+  }
+}
+
 export const handleRentRoom: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
