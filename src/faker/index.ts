@@ -25,6 +25,16 @@ const cities = ['hanoi', 'hcm', 'vungtau', 'dalat', 'danang', 'nhatrang', 'quang
 const roomTypes = ['MOTEL', 'APARTMENT', 'WHOLE_HOUSE', 'WHOLE_APARTMENT']
 const bathroomTypes = ['PRIVATE', 'SHARED']
 const kitchenTypes = ['PRIVATE', 'SHARED', 'NONE']
+const images = [
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229701652?alt=media&token=29dccb44-c7b0-4566-8640-d870521b7869',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229698362?alt=media&token=ad2b58d4-7a05-41b0-8dc7-a04ba4c1876a',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229706658?alt=media&token=767247b4-67bd-4ab6-962d-85a348e6f74c',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229710619?alt=media&token=d37c42f4-e0de-4bcd-8fbd-7bf7c3d3fe4e',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229790195?alt=media&token=bcc1be89-2a32-4e3f-bd8a-ed87b4a9896f',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229793716?alt=media&token=f05a0264-cbb2-4876-b762-856e83d0635e',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229796740?alt=media&token=60d3b488-8592-44f2-bbb8-aba6eadda440',
+  'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images%2F1609229690542?alt=media&token=c4a7c97e-a1fb-4fc0-af85-12a1de31444e',
+]
 admin
   .auth()
   .createUser({
@@ -64,15 +74,22 @@ for (let i = 0; i < 3; i += 1) {
       const newUser = new User({roles: ['owner'], _id: userRecord.uid, owner: newOwner._id, status: 'APPROVED'})
       await newUser.save()
 
-      for (let j = 0; j < 8; j += 1) {
+      for (let j = 0; j < 32; j += 1) {
         const newRoom = new Room({
           owner: newOwner._id,
           roomType: roomTypes[j % 4],
           name: faker.name.findName(),
-          description: faker.commerce.productDescription(),
+          description: `Một căn phòng tràn ngập ánh nắng, cây và sách. Vô cùng thoáng đãng và thoải mái. Bạn có thể ngắm hoàng hôn tím lịm phía chân trời, giữa những tòa nhà, nghe tiếng rao văng vẳng của những người bán dạo. Đúng chất Hà Nội, San's Homestay nằm trong một khu chung cư cũ nhưng căn hộ được tự tay San chăm bẵm, trang trí. Bạn có thể tìm thấy nhiều điều thú vị xung quanh khu nhà.
+          Hiện San đang học tập và sinh sống ở nước ngoài, để được hỗ trợ, vui lòng liên hệ Ms. Giang. San's Home là căn hộ chia sẻ, quản gia sẽ ở một phòng riêng cùng căn hộ.       
+          Chúng tôi dành tất cả những gì tuyệt vời nhất cho căn hộ xinh đẹp này để chờ đến ngày được chào đón bạn. Thiết kế chủ đạo với tông màu trắng cùng nội thất tốt giúp ngôi nhà trẻ trung và ấm cúng, mang đến cho bạn cảm giác như đang ở trong chính ngôi nhà của mình vậy.
+          Bên cạnh đó, chúng tôi cũng là một người địa phương vô cùng thân thiện và thoải mái. Chúng tôi cùng chia sẻ căn hộ với bạn, chính vì vậy đừng ngại ngần chia sẻ với chúng tôi những điều bạn đang thắc mắc hoặc những khó khăn bạn gặp phải khi ở đây nhé!`,
           area: 30,
-          city: cities[j],
-          detailAddress: faker.address.streetAddress(),
+          rule: `Là căn hộ chia sẻ, quản gia sẽ ở một phòng riêng cùng căn hộ để hỗ trợ bạn.
+          Hãy báo với San giờ giấc check in check out dự kiến của bạn, mọi thứ đều linh hoạt, đừng lo.
+          Chú ý khi sử dụng những không gian chia sẻ: nhà bếp, nhà tắm, phòng khách... thật nhẹ nhàng, gọn gàng và sạch sẽ.
+          Đừng ngại yêu cầu/góp ý bất cứ điều gì, chúng ta sẽ cùng giải quyết nó.`,
+          city: cities[j % 8],
+          address: faker.address.streetAddress(),
           bathroomType: bathroomTypes[j % 2],
           kitchenType: kitchenTypes[j % 3],
           hasWaterHeater: j % 2 === 0,
@@ -90,13 +107,7 @@ for (let i = 0; i < 3; i += 1) {
           views: 0,
           isRent: false,
           status: 'APPROVED',
-          images: [
-            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(1).jpeg?alt=media&token=4a5db726-dcb6-46b3-98ac-9ecffe84e601',
-            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(2).jpeg?alt=media&token=1e12f1e3-4081-4adc-be3f-10793f368eef',
-            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download.jpeg?alt=media&token=b4b5f627-fb4c-4494-9839-59a4a6a2c121',
-            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/download%20(3).jpeg?alt=media&token=e092270f-abbd-41af-ae4a-95089372ac74',
-            'https://firebasestorage.googleapis.com/v0/b/easy-accomod-57b04.appspot.com/o/images.jpeg?alt=media&token=cef3d9ed-a60b-4fc2-b563-e86128811f2d',
-          ],
+          images: images.sort(() => Math.random() - 0.5),
         })
         newRoom.save()
       }

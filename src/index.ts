@@ -78,8 +78,9 @@ app.post('/api/admins/create', getUID, adminController.createAdmin)
  * room api
  */
 app.post('/api/rooms/create', checkAuth, roomController.createRoom) // owner, admin
-app.get('/api/rooms/pending', roomController.getPendingRooms) // admin
+app.get('/api/rooms/pending', checkAuth, roomController.getPendingRooms) // admin
 app.put('/api/rooms/:room_id/update', checkAuth, roomController.updateRoom) // owner, admin
+app.put('/api/rooms/:room_id/renew', checkAuth, roomController.renewRoom) // owner, admin
 app.get('/api/rooms/:room_id', checkAuthOrNot, roomController.getRoomDetail)
 app.get('/api/rooms/city/:city', roomController.getRoomsByCity)
 app.put('/api/rooms/:room_id/approve', checkAuth, roomController.approveRoom) // admin

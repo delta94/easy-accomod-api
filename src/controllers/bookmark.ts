@@ -51,7 +51,7 @@ export const removeBookmark: MiddlewareFn = async (req, res, next) => {
 export const getAllBookmarks: MiddlewareFn = async (req, res, next) => {
   try {
     const {_id} = req.user
-    const bookmarks = await Bookmark.find({renter: _id}).populate({
+    const bookmarks = await Bookmark.find({renter: _id, isActive: true}).populate({
       path: 'room',
       populate: {
         path: 'reviews',
