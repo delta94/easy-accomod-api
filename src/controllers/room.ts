@@ -10,7 +10,7 @@ export const createRoom: MiddlewareFn = async (req, res, next) => {
     await newRoom.save()
     return res.status(200).json({
       success: true,
-      data: req.body,
+      data: newRoom,
     })
   } catch (error) {
     console.log(error)

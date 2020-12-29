@@ -9,7 +9,7 @@ export interface RoomDocument extends Document {
   area: number
   city: string
   description?: string
-  detailAddress: string
+  address: string
   locationAround?: [string]
   bathroomType: string
   kitchenType: string
@@ -22,6 +22,7 @@ export interface RoomDocument extends Document {
   roomPrice: number
   waterPrice: number
   electricityPrice: number
+  rule?: string
   images: [string]
   isWithOwner: boolean
   isExpired: boolean
@@ -70,7 +71,7 @@ const RoomSchema: Schema = new Schema({
     type: String,
     required: false,
   },
-  detailAddress: {
+  address: {
     type: String,
     required: [true, 'detail address is required'],
   },
@@ -135,6 +136,10 @@ const RoomSchema: Schema = new Schema({
   electricityPrice: {
     type: Number,
     required: [true, 'electricityPrice is required'],
+  },
+  rule: {
+    type: String,
+    required: false,
   },
   images: {
     type: [String],
