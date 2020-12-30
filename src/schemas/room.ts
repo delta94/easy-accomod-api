@@ -53,6 +53,7 @@ const RoomSchema: Schema = new Schema({
   roomQuantity: {
     type: Number,
     required: false,
+    min: [0, 'room quantity is in valid'],
     default: 1,
   },
   name: {
@@ -61,6 +62,7 @@ const RoomSchema: Schema = new Schema({
   },
   area: {
     type: Number,
+    min: [0, 'area is in valid'],
     required: [true, 'area is required'],
   },
   city: {
@@ -127,14 +129,17 @@ const RoomSchema: Schema = new Schema({
   },
   roomPrice: {
     type: Number,
+    min: [0, 'room price is in valid'],
     required: [true, 'roomPrice is required'],
   },
   waterPrice: {
     type: Number,
+    min: [0, 'water price is in valid'],
     required: [true, 'waterPrice is required'],
   },
   electricityPrice: {
     type: Number,
+    min: [0, 'electric price is in valid'],
     required: [true, 'electricityPrice is required'],
   },
   rule: {
